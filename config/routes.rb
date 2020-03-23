@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :maps
-  resources :simulations, only: [:index, :new]
+  resources :simulations, only: [:index, :new, :show]
   root 'static#home'
 
 end
