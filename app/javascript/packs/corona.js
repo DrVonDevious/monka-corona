@@ -110,6 +110,11 @@ function renderNode() {
   const map = document.querySelector("#map")
   const node = document.createElement("div")
   node.id = "node"
+
+  if (this.state == "healthy") {
+    node.style.backgroundColor = "green"
+  }
+
   node.style.top = this.ypos+"%"
   node.style.left = this.xpos+"%"
   map.append(node)
