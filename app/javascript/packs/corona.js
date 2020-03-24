@@ -8,6 +8,7 @@ function createSimulation() {
   form_submit.addEventListener("click", () => {
     event.preventDefault()
     postSimulation.call(form_submit)
+    hideForm()
   })
 }
 
@@ -40,6 +41,16 @@ function createMap() {
       simulation_id: this.id
     })
   })
+}
+
+function hideForm() {
+  const form_container = document.querySelector("#simulation-form-container")
+  form_container.style.display = "none"
+}
+
+function showMap() {
+  const map_container = document.querySelector("#map-container")
+  map_container.style.display = "block"
 }
 
 createSimulation()
