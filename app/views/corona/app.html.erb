@@ -21,7 +21,14 @@
 
     <%# Map where all the magic happens %>
     <div id="map-container">
-      <canvas id="map"></canvas>
+      <div id="map"></div>
+    </div>
+
+    <%# Index of all the simulations %>
+    <div id="simulations-container">
+      <ul id="simulations-list">
+        <%# Insert simulation list items here with JS %>
+      </ul>
     </div>
 
     <%= javascript_pack_tag "corona" %>

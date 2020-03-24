@@ -79,7 +79,7 @@ function createNodes(simulation) {
     })
       .then(res => res.json())
       .then(node => {
-        console.log(node)
+        renderNode.call(node)
       })
   }
 
@@ -101,11 +101,18 @@ function createNodes(simulation) {
     })
       .then(res => res.json())
       .then(node => {
-        //TODO: Render nodes
-        console.log(node)
+        renderNode.call(node)
       })
   }
+}
 
+function renderNode() {
+  const map = document.querySelector("#map")
+  const node = document.createElement("div")
+  node.id = "node"
+  node.style.top = this.ypos+"%"
+  node.style.left = this.xpos+"%"
+  map.append(node)
 }
 
 createSimulation()

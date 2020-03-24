@@ -2,12 +2,26 @@
 body {
 }
 
+#node {
+  position: absolute;
+  height: 10px;
+  width: 10px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+}
+
 #map-container {
   display: none;
+  width: 100vw;
+  height: 98vh;
 }
 
 #map {
+  position: relative;
   background-color: gray;
+  width: 80%;
+  height: 100%;
 }
 
 #healthy-node {
