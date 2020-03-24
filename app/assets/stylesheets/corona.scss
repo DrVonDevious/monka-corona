@@ -3,11 +3,19 @@ body {
   background-color: black;
   background-image: url("https://wrcb.images.worldnow.com/images/19280171_G.png?auto=webp&disable=upscale&height=560&fit=bounds&lastEditedDate=1584929264000");
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: 116%;
+  
+  
 }
 
 label{
   color: white;
+}
+
+#simulation-form-container {
+position: fixed;
+top: 10%;
+left: 20%;
 }
 
 #node {
@@ -28,8 +36,10 @@ label{
 #map {
   position: relative;
   background-color: gray;
-  width: 50%;
-  height: 50%;
+  left:19.5%;
+  top:-3%;
+  width: 63.5%;
+  height: 89%;
 }
 
 #healthy-node {
