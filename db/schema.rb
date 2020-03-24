@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_23_155407) do
+ActiveRecord::Schema.define(version: 2020_03_24_024606) do
 
   create_table "maps", force: :cascade do |t|
     t.integer "width"
     t.integer "height"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "simulation_id"
   end
 
   create_table "nodes", force: :cascade do |t|

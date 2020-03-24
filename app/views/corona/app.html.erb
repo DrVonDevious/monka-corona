@@ -1,4 +1,24 @@
-<h1>Hello World!</h1>
-<body>
-  <%= javascript_pack_tag "corona" %>
-</body>
+<html>
+  <head>
+    <%= csrf_meta_tags %>
+    <title>MonkaCorona</title>
+  </head>
+
+  <body>
+
+    <%# Form for creating a new simulation %>
+    <div id="simulation-form-container">
+      <form id="simulation-form">
+        <label>Name</label>
+        <input id="name" type="string">
+        <br>
+        <label>Initial Infected</label>
+        <input id="infected" type="number">
+        <br>
+        <input id="form-submit" type="submit">
+      </form>
+    </div>
+
+    <%= javascript_pack_tag "corona" %>
+  </body>
+</html>

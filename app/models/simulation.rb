@@ -1,3 +1,3 @@
 class Simulation < ApplicationRecord
-  has_one: :map
+  has_one :map
 end
