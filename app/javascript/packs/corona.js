@@ -41,6 +41,8 @@ function createMap() {
       simulation_id: this.id
     })
   })
+    .then(res => res.json())
+    .then(map => { showMap() })
 }
 
 function hideForm() {
