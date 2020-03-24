@@ -1,3 +1,3 @@
 class Node < ApplicationRecord
-  belongs_to: :map
+  belongs_to :map
 end

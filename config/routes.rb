@@ -4,5 +4,6 @@ Rails.application.routes.draw do
 
   resources :maps
   resources :simulations
+  resources :nodes
 
 end

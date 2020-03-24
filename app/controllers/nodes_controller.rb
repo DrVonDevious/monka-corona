@@ -15,7 +15,7 @@ class NodesController < ApplicationController
   private
 
   def strong_params
-    params.permit(:name, :age, :xpos, :ypos)
+    params.permit(:name, :age, :state, :xpos, :ypos, :map_id)
   end
 
   def node
