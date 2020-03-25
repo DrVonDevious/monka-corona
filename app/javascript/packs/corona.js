@@ -5,6 +5,9 @@ const NODE_URL = "http://localhost:3000/nodes"
 
 const MAP_WIDTH = 800
 const MAP_HEIGHT = 600
+
+const ACTIVE_SIMULATIONS = []
+
 const scroll = document.querySelector("#scrollbox")
 
 
@@ -111,6 +114,7 @@ function showForm(){
 function hideMap() {
   const map = document.querySelector("#map-container")
 
+  nodes_array = []
   map.style.display = "none"
 }
 
