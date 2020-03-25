@@ -107,7 +107,7 @@ function createNodes(simulation) {
   }
 
   console.log("generating healthy nodes..")
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 100 - simulation.initial_infected; i++) {
     let rand_x = Math.floor(Math.random() * MAP_WIDTH)
     let rand_y = Math.floor(Math.random() * MAP_HEIGHT)
     let rand_age = Math.floor(Math.random() * 85)
