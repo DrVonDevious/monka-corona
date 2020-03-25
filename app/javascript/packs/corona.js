@@ -8,6 +8,14 @@ const MAP_HEIGHT = 600
 
 let nodes_array = []
 
+function getSimulations() {
+  fetch(SIMULATIONS_URL)
+    .then(res => res.json())
+    .then(simulations => {
+      console.log(simulations)
+    })
+}
+
 function createSimulation() {
   const form_submit = document.querySelector("#form-submit")
 
