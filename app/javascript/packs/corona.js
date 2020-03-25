@@ -61,7 +61,6 @@ function hideForm() {
 
 function showMap() {
   const map_container = document.querySelector("#map-container")
-  const map = document.querySelector("#map")
   const run_btn = document.querySelector("#run-btn")
 
   map_container.style.display = "block"
@@ -157,6 +156,10 @@ function renderScreen(nodes) {
   })
 }
 
+function killNode() {
+
+}
+
 function checkNodeCollide(nx, ny) {
   if (nx >= MAP_WIDTH -5 || nx <= 5) {
     return true
@@ -168,7 +171,6 @@ function checkNodeCollide(nx, ny) {
 }
 
 function moveNode() {
-  const map = document.querySelector("#map")
 
   if (Math.floor(Math.random() * 8) == 0) {
     this.last_angle = Math.floor(Math.random() * 360)
