@@ -71,6 +71,15 @@ function showMap() {
   })
 }
 
+function spreadInfection(nodes) {
+  nodes.forEach(node => {
+    if ((this.xpos >= node.xpos -4 && this.xpos <= node.xpos +4) &&
+       (this.ypos >= node.ypos -4 && this.ypos <= node.ypos +4)) {
+      node.state = "infected"
+    }
+  })
+}
+
 function createNodes(simulation) {
   console.log("generating infected nodes...")
   for (let i = 0; i < simulation.initial_infected; i++) {
@@ -151,7 +160,7 @@ function renderScreen(nodes) {
 function checkNodeCollide(nx, ny) {
   if (nx >= MAP_WIDTH -5 || nx <= 5) {
     return true
-  } else if (ny >= MAP_HEIGHT -5|| ny <= 5) {
+  } else if (ny >= MAP_HEIGHT -5 || ny <= 5) {
     return true
   } else {
     return false
@@ -174,8 +183,8 @@ function moveNode() {
     this.xpos = nx
     this.ypos = ny
   } else {
-    let nx = this.xpos + -Math.abs(Math.cos(radians) * 2)
-    let ny = this.ypos + -Math.abs(Math.sin(radians) * 2)
+    let nx = this.xpos + -Math.cos(radians) * 2
+    let ny = this.ypos + -Math.sin(radians) * 2
     this.xpos = nx
     this.ypos = ny
   }
@@ -183,6 +192,9 @@ function moveNode() {
 
 function updateNode() {
   moveNode.call(this)
+  if (this.state == "infected") {
+    spreadInfection.call(this, nodes_array)
+  }
   refreshScreen.call(map)
 }
 
