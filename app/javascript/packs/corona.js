@@ -8,14 +8,6 @@ const MAP_HEIGHT = 600
 
 let nodes_array = []
 
-function getSimulations() {
-  fetch(SIMULATIONS_URL)
-    .then(res => res.json())
-    .then(simulations => {
-      console.log(simulations)
-    })
-}
-
 function createSimulation() {
   const form_submit = document.querySelector("#form-submit")
 
@@ -156,7 +148,7 @@ function renderScreen(nodes) {
   })
 }
 
-function updateNode() {
+function moveNode() {
   const map = document.querySelector("#map")
 
   if (Math.floor(Math.random() * 4) == 0) {
@@ -167,7 +159,10 @@ function updateNode() {
 
   this.xpos += Math.cos(radians)
   this.ypos += Math.sin(radians)
+}
 
+function updateNode() {
+  moveNode.call(this)
   refreshScreen.call(map)
 }
 
