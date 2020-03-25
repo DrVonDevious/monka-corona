@@ -133,7 +133,9 @@ function spreadInfection(nodes) {
   nodes.forEach(node => {
     if ((this.xpos >= node.xpos -10 && this.xpos <= node.xpos +10) &&
        (this.ypos >= node.ypos -10 && this.ypos <= node.ypos +10)) {
-      node.state = "infected"
+      if (node.state == "healthy") {
+        node.state = "infected" 
+      }
     }
   })
 }
@@ -158,9 +160,9 @@ function createNodes(simulation) {
     })
       .then(res => res.json())
       .then(node => {
-        renderNode.call(node)
         node["last_angle"] = 0
         nodes_array.push(node)
+        renderNodes.call(nodes_array)
       })
   }
 
@@ -183,24 +185,34 @@ function createNodes(simulation) {
     })
       .then(res => res.json())
       .then(node => {
-        renderNode.call(node)
         node["last_angle"] = 0
         nodes_array.push(node)
+        renderNodes.call(nodes_array)
       })
   }
 }
 
-function renderNode() {
+function renderNodes() {
   const map = document.querySelector("#map").getContext("2d")
 
-  switch(this.state) {
-    case "healthy": map.fillStyle = "#57f542"; break;
-    case "infected": map.fillStyle = "#ff2626"; break;
-    case "dead": map.fillStyle = "#000000"; break;
-  }
+
+  const infected_nodes = this.filter(node => node.state == "infected")
+  const healthy_nodes = this.filter(node => node.state == "healthy")
 
   map.beginPath()
-  map.arc(this.xpos, this.ypos, 4, 0, Math.PI * 2, true)
+  infected_nodes.forEach(node => {
+    map.moveTo(node.xpos, node.ypos)
+    map.arc(node.xpos, node.ypos, 4, 0, Math.PI * 2, true)
+    map.fillStyle = "#ff2626"
+  })
+  map.fill()
+
+  map.beginPath()
+  healthy_nodes.forEach(node => {
+    map.moveTo(node.xpos, node.ypos)
+    map.arc(node.xpos, node.ypos, 4, 0, Math.PI * 2, true)
+    map.fillStyle = "#57f542"
+  })
   map.fill()
 }
 
@@ -211,14 +223,11 @@ function refreshScreen() {
 }
 
 function renderScreen(nodes) {
-  nodes.forEach(node => {
-    renderNode.call(node)
-  })
+  renderNodes.call(nodes)
 }
 
 function killNode() {
   this.state = "dead"
-  console.log("A node has died!")
 }
 
 function checkNodeCollide(nx, ny) {
@@ -232,15 +241,14 @@ function checkNodeCollide(nx, ny) {
 }
 
 function moveNode() {
-
   if (Math.floor(Math.random() * 8) == 0) {
     this.last_angle = Math.floor(Math.random() * 360)
   }
 
   const radians = this.last_angle * Math.PI / 180
 
-  let nx = this.xpos + Math.cos(radians) * 4
-  let ny = this.ypos + Math.sin(radians) * 4
+  let nx = Math.floor(this.xpos + Math.cos(radians) * 4)
+  let ny = Math.floor(this.ypos + Math.sin(radians) * 4)
 
   if (!checkNodeCollide(nx, ny)) {
     this.xpos = nx
@@ -256,7 +264,7 @@ function moveNode() {
 function updateNode() {
   moveNode.call(this)
   if (this.state == "infected") {
-    if (Math.floor(Math.random() * 10) == 0) {
+    if (Math.floor(Math.random() * 400) == 0) {
       killNode.call(this)
     }
     spreadInfection.call(this, nodes_array)
@@ -273,7 +281,7 @@ function stepSimulation() {
 }
 
 function runSimulation() {
-  setInterval(() => {stepSimulation()}, 1)
+  setInterval(() => {stepSimulation()}, 10)
 }
 
 createSimulation()
