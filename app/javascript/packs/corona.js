@@ -3,6 +3,9 @@ const SIMULATIONS_URL = "http://localhost:3000/simulations"
 const MAPS_URL = "http://localhost:3000/maps"
 const NODE_URL = "http://localhost:3000/nodes"
 
+const MAP_WIDTH = 800
+const MAP_HEIGHT = 600
+
 let nodes_array = []
 
 function createSimulation() {
@@ -71,8 +74,8 @@ function showMap() {
 function createNodes(simulation) {
   console.log("generating infected nodes...")
   for (let i = 0; i < simulation.initial_infected; i++) {
-    let rand_x = Math.floor(Math.random() * 100.00)
-    let rand_y = Math.floor(Math.random() * 100.00)
+    let rand_x = Math.floor(Math.random() * MAP_WIDTH)
+    let rand_y = Math.floor(Math.random() * MAP_HEIGHT)
     let rand_age = Math.floor(Math.random() * 85)
     fetch(NODE_URL, {
       method: "POST",
@@ -89,14 +92,15 @@ function createNodes(simulation) {
       .then(res => res.json())
       .then(node => {
         renderNode.call(node)
+        node["last_angle"] = 0
         nodes_array.push(node)
       })
   }
 
   console.log("generating healthy nodes..")
   for (let i = 0; i < 100; i++) {
-    let rand_x = Math.floor(Math.random() * 100.00)
-    let rand_y = Math.floor(Math.random() * 100.00)
+    let rand_x = Math.floor(Math.random() * MAP_WIDTH)
+    let rand_y = Math.floor(Math.random() * MAP_HEIGHT)
     let rand_age = Math.floor(Math.random() * 85)
     fetch(NODE_URL, {
       method: "POST",
@@ -113,6 +117,7 @@ function createNodes(simulation) {
       .then(res => res.json())
       .then(node => {
         renderNode.call(node)
+        node["last_angle"] = 0
         nodes_array.push(node)
       })
   }
@@ -121,9 +126,13 @@ function createNodes(simulation) {
 function renderNode() {
   const map = document.querySelector("#map").getContext("2d")
 
-  map.fillStyle = "#ff2626"
+  switch(this.state) {
+    case "healthy": map.fillStyle = "#57f542"; break;
+    case "infected": map.fillStyle = "#ff2626"; break;
+  }
+
   map.beginPath()
-  map.arc(this.xpos * 8, this.ypos * 8, 4, 0, Math.PI * 2, true)
+  map.arc(this.xpos, this.ypos, 4, 0, Math.PI * 2, true)
   map.fill()
 }
 
@@ -141,9 +150,12 @@ function renderScreen(nodes) {
 
 function updateNode() {
   const map = document.querySelector("#map")
-  const angle = Math.floor(Math.random() * 360)
-  console.log(angle)
-  const radians = angle * Math.PI / 180
+
+  if (Math.floor(Math.random() * 4) == 0) {
+    this.last_angle = Math.floor(Math.random() * 360)
+  }
+
+  const radians = this.last_angle * Math.PI / 180
 
   this.xpos += Math.cos(radians)
   this.ypos += Math.sin(radians)
