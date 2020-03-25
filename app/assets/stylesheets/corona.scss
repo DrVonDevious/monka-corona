@@ -3,10 +3,9 @@ body {
   background-color: black;
   background-image: url("https://wrcb.images.worldnow.com/images/19280171_G.png?auto=webp&disable=upscale&height=560&fit=bounds&lastEditedDate=1584929264000");
   background-repeat: no-repeat;
-  background-size: 116%;
-  
-  
+  background-size: 117%;
 }
+
 
 label{
   color: white;
@@ -15,7 +14,7 @@ label{
 #simulation-form-container {
 position: fixed;
 top: 10%;
-left: 20%;
+left: 21%;
 }
 
 #node {
@@ -30,16 +29,16 @@ left: 20%;
 #map-container {
   display: none;
   width: 100vw;
-  height: 98vh;
+  height: 90vh;
 }
 
 #map {
   position: relative;
   background-color: gray;
-  left:19.5%;
-  top:-3%;
-  width: 63.5%;
-  height: 89%;
+  left:20%;
+  top:-2.8%;
+  width: 63.7%;
+  height: 96.5%;
 }
 
 #healthy-node {
