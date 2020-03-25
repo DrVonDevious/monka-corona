@@ -3,6 +3,8 @@ const SIMULATIONS_URL = "http://localhost:3000/simulations"
 const MAPS_URL = "http://localhost:3000/maps"
 const NODE_URL = "http://localhost:3000/nodes"
 
+let nodes_array = []
+
 function createSimulation() {
   const form_submit = document.querySelector("#form-submit")
 
@@ -56,7 +58,14 @@ function hideForm() {
 
 function showMap() {
   const map_container = document.querySelector("#map-container")
+  const map = document.querySelector("#map")
+  const run_btn = document.querySelector("#run-btn")
+
   map_container.style.display = "block"
+
+  run_btn.addEventListener("click", () => {
+    stepSimulation()
+  })
 }
 
 function createNodes(simulation) {
@@ -80,9 +89,11 @@ function createNodes(simulation) {
       .then(res => res.json())
       .then(node => {
         renderNode.call(node)
+        nodes_array.push(node)
       })
   }
 
+  console.log("generating healthy nodes..")
   for (let i = 0; i < 100; i++) {
     let rand_x = Math.floor(Math.random() * 100.00)
     let rand_y = Math.floor(Math.random() * 100.00)
@@ -102,22 +113,51 @@ function createNodes(simulation) {
       .then(res => res.json())
       .then(node => {
         renderNode.call(node)
+        nodes_array.push(node)
       })
   }
 }
 
 function renderNode() {
+  const map = document.querySelector("#map").getContext("2d")
+
+  map.fillStyle = "#ff2626"
+  map.beginPath()
+  map.arc(this.xpos * 8, this.ypos * 8, 4, 0, Math.PI * 2, true)
+  map.fill()
+}
+
+function refreshScreen() {
+  let context = this.getContext("2d")
+  context.clearRect(0, 0, this.width, this.height)
+  renderScreen(nodes_array)
+}
+
+function renderScreen(nodes) {
+  nodes.forEach(node => {
+    renderNode.call(node)
+  })
+}
+
+function updateNode() {
   const map = document.querySelector("#map")
-  const node = document.createElement("div")
-  node.id = "node"
+  const angle = Math.floor(Math.random() * 360)
+  console.log(angle)
+  const radians = angle * Math.PI / 180
 
-  if (this.state == "healthy") {
-    node.style.backgroundColor = "green"
-  }
+  this.xpos += Math.cos(radians)
+  this.ypos += Math.sin(radians)
 
-  node.style.top = this.ypos+"%"
-  node.style.left = this.xpos+"%"
-  map.append(node)
+  refreshScreen.call(map)
+}
+
+function stepSimulation() {
+  const map = document.querySelector("#map")
+  nodes_array.map(node => {
+    updateNode.call(node)
+    refreshScreen.call(map)
+  })
+  // setTimeout(stepSimulation(), 1000)
 }
 
 createSimulation()
