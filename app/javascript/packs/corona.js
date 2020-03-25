@@ -137,6 +137,7 @@ function renderNode() {
   switch(this.state) {
     case "healthy": map.fillStyle = "#57f542"; break;
     case "infected": map.fillStyle = "#ff2626"; break;
+    case "dead": map.fillStyle = "#000000"; break;
   }
 
   map.beginPath()
@@ -157,7 +158,8 @@ function renderScreen(nodes) {
 }
 
 function killNode() {
-
+  this.state = "dead"
+  console.log("A node has died!")
 }
 
 function checkNodeCollide(nx, ny) {
@@ -195,6 +197,9 @@ function moveNode() {
 function updateNode() {
   moveNode.call(this)
   if (this.state == "infected") {
+    if (Math.floor(Math.random() * 10) == 0) {
+      killNode.call(this)
+    }
     spreadInfection.call(this, nodes_array)
   }
   refreshScreen.call(map)
