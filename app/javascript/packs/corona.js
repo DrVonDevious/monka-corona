@@ -73,8 +73,8 @@ function showMap() {
 
 function spreadInfection(nodes) {
   nodes.forEach(node => {
-    if ((this.xpos >= node.xpos -4 && this.xpos <= node.xpos +4) &&
-       (this.ypos >= node.ypos -4 && this.ypos <= node.ypos +4)) {
+    if ((this.xpos >= node.xpos -10 && this.xpos <= node.xpos +10) &&
+       (this.ypos >= node.ypos -10 && this.ypos <= node.ypos +10)) {
       node.state = "infected"
     }
   })
@@ -176,8 +176,8 @@ function moveNode() {
 
   const radians = this.last_angle * Math.PI / 180
 
-  let nx = this.xpos + Math.cos(radians) * 2
-  let ny = this.ypos + Math.sin(radians) * 2
+  let nx = this.xpos + Math.cos(radians) * 4
+  let ny = this.ypos + Math.sin(radians) * 4
 
   if (!checkNodeCollide(nx, ny)) {
     this.xpos = nx
@@ -199,12 +199,14 @@ function updateNode() {
 }
 
 function stepSimulation() {
-  const map = document.querySelector("#map")
-  nodes_array.map(node => {
-    updateNode.call(node)
-    refreshScreen.call(map)
-  })
-  // setTimeout(stepSimulation(), 1000)
+  function nextFrame() {
+    const map = document.querySelector("#map")
+    nodes_array.map(node => {
+      updateNode.call(node)
+      refreshScreen.call(map)
+    })
+  }
+  setInterval(() => {nextFrame()}, 1)
 }
 
 createSimulation()
