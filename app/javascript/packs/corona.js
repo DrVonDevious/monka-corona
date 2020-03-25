@@ -67,7 +67,7 @@ function showMap() {
   map_container.style.display = "block"
 
   run_btn.addEventListener("click", () => {
-    stepSimulation()
+    runSimulation()
   })
 }
 
@@ -199,14 +199,15 @@ function updateNode() {
 }
 
 function stepSimulation() {
-  function nextFrame() {
-    const map = document.querySelector("#map")
-    nodes_array.map(node => {
-      updateNode.call(node)
-      refreshScreen.call(map)
-    })
-  }
-  setInterval(() => {nextFrame()}, 1)
+  const map = document.querySelector("#map")
+  nodes_array.map(node => {
+    updateNode.call(node)
+    refreshScreen.call(map)
+  })
+}
+
+function runSimulation() {
+  setInterval(() => {stepSimulation()}, 1)
 }
 
 createSimulation()
