@@ -4,7 +4,7 @@ class SimulationsController < ApplicationController
 
   def index
     simulations = Simulation.all
-    render json: simulations
+    render json: simulations, except: [:updated_at, :created_at]
   end
 
   def create
