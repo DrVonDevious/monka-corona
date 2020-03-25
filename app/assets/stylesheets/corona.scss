@@ -12,7 +12,7 @@ label{
 }
 
 #simulation-form-container {
-position: fixed;
+position: absolute;
 top: 10%;
 left: 21%;
 }
@@ -28,17 +28,15 @@ left: 21%;
 
 #map-container {
   display: none;
-  width: 100vw;
-  height: 90vh;
 }
 
 #map {
   position: relative;
   background-color: gray;
-  left:20%;
-  top:-2.8%;
+  left:285px;
+  top:-25px;
   width: 63.7%;
-  height: 96.5%;
+   height: 103%;
 }
 
 #healthy-node {
@@ -48,3 +46,17 @@ left: 21%;
 #infected-node {
   color: red;
 }
+
+#scrollbox {
+  display: none;
+  overflow: scroll;
+  width: 272px;
+  height: 602px;
+  background-color: gray;
+  position: relative;
+  left: 10px;
+  top: 108px;
+  }
+
+  // #simulations-container{
+  // }

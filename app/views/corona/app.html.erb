@@ -19,8 +19,8 @@
       <a class="navbar-brand" href="#">Monka Corona</a>
     </div>
     <ul class="nav navbar-nav navbar-right">
-      <li><a class="New" href="#"> New</a></li>
-      <li><a class="Sims" href="#"> Sims</a></li>
+      <li><a id="new" href="#"> New</a></li>
+      <li><a id="sims" > Sims</a></li>
     </ul>
   </div>
 </nav>
@@ -49,9 +49,10 @@
 
     <%# Index of all the simulations %>
     <div id="simulations-container">
-      <ul id="simulations-list">
+      <div id="scrollbox">
         <%# Insert simulation list items here with JS %>
-      </ul>
+         
+      </div>
     </div>
 
     <%= javascript_pack_tag "corona" %>

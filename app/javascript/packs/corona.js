@@ -5,8 +5,51 @@ const NODE_URL = "http://localhost:3000/nodes"
 
 const MAP_WIDTH = 800
 const MAP_HEIGHT = 600
+const scroll = document.querySelector("#scrollbox")
+
 
 let nodes_array = []
+
+function getSimulation(){
+  fetch(SIMULATIONS_URL)
+  .then(res => res.json())
+  .then(sims => {
+    sims.forEach(sim => {
+      showSimulations(sim)
+    })
+  })
+}
+
+function showSimulations(simulation){
+  // const scroll = document.querySelector("#scrollbox")
+  const sim = document.createElement("div")
+  const name = document.createElement("h1")
+  name.innerText = `Name: ${simulation.name}`
+  const time = document.createElement("p")
+  time.innerText = `Time: ${simulation.time_running}`
+  const initial = document.createElement("p")
+  initial.innerText = `initial_infected: ${simulation.initial_infected}`
+
+  
+
+  sim.append(name,time,initial)
+  scroll.append(sim)
+
+}
+
+  let sim_btn = document.querySelector("#sims")
+  sim_btn.addEventListener("click", () => {
+    scroll.style.display = "block"
+    hideMap()
+    showForm()
+    getSimulation()
+  })
+
+
+  function hideSim() {
+    scroll.style.display = "none"
+  }
+
 
 function createSimulation() {
   const form_submit = document.querySelector("#form-submit")
@@ -50,6 +93,7 @@ function createMap() {
     .then(res => res.json())
     .then(map => {
       createNodes.call(map, this)
+      hideSim()
       showMap()
     })
 }
@@ -57,6 +101,17 @@ function createMap() {
 function hideForm() {
   const form_container = document.querySelector("#simulation-form-container")
   form_container.style.display = "none"
+}
+
+function showForm(){
+  const form_container = document.querySelector("#simulation-form-container")
+  form_container.style.display = "block"
+}
+
+function hideMap() {
+  const map = document.querySelector("#map-container")
+
+  map.style.display = "none"
 }
 
 function showMap() {
