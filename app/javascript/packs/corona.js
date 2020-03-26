@@ -5,6 +5,11 @@ const NODE_URL = "http://localhost:3000/nodes"
 
 const MAP_WIDTH = 800
 const MAP_HEIGHT = 600
+
+const ACTIVE_SIMULATIONS = []
+
+let loop = 0
+
 const scroll = document.querySelector("#scrollbox")
 
 
@@ -15,14 +20,43 @@ function getSimulation(){
   .then(res => res.json())
   .then(sims => {
     sims.forEach(sim => {
+      console.log(sim)
       showSimulations(sim)
     })
   })
 }
 
-function showSimulations(simulation){
-  // const sim = document.createElement("div")
-  const a = document.createElement("a")
+function getNodes() {
+  fetch(NODE_URL)
+    .then(res => res.json())
+    .then(nodes => {
+      let map_nodes = nodes.filter(node => node.map_id == this.id)
+      map_nodes.forEach(node => node["last_angle"] = 1)
+      nodes_array.push(...map_nodes)
+      const map = document.querySelector("#map")
+      hideSim()
+      showMap()
+      refreshScreen.call(map)
+    })
+}
+
+function updateNodes() {
+  console.log("Saving nodes...")
+  nodes_array.forEach(node => {
+    debugger
+    fetch(NODE_URL + "/" + node.id, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(node)
+    })
+      .then(res => res.json())
+      .then(node => console.log(node))
+  })
+  console.log("Nodes saved!")
+}
+
+function showSimulations(simulation) {
+  const sim = document.createElement("div")
   const name = document.createElement("h1")
   name.innerText = `Name: ${simulation.name}`
   name.className = "name"
@@ -31,27 +65,36 @@ function showSimulations(simulation){
   const initial = document.createElement("p")
   initial.innerText = `initial_infected: ${simulation.initial_infected}`
 
-  
-  a.append(name)
-  scroll.append(a,time,initial)
-  // scroll.append(sim)
+  sim.addEventListener("click", () => {
+    getNodes.call(simulation)
+  })
 
-
+  scroll.append(name,time,initial)
+  scroll.append(sim)
 }
 
+function loadSimulation() {
+  const map = document.querySelector("#map")
+  hideSim()
+  getNodes.call(this)
+  showMap()
+  refreshScreen.call(map)
+}
+
+function createSimulationsButton() {
   let sim_btn = document.querySelector("#sims")
   sim_btn.addEventListener("click", () => {
     scroll.style.display = "block"
-    // hideMap()
-    scroll.innerHTML =""
+    stopSimulation()
+    hideMap()
     showForm()
     getSimulation()
   })
+}
 
-
-  function hideSim() {
-    scroll.style.display = "none"
-  }
+function hideSim() {
+  scroll.style.display = "none"
+}
 
 
 function createSimulation() {
@@ -83,6 +126,19 @@ function postSimulation() {
       console.log(simulation)
       createMap.call(simulation)
     })
+}
+
+function createMapButtons() {
+  const stop_button = document.querySelector("#stop-btn")
+  const run_btn = document.querySelector("#run-btn")
+
+  stop_button.addEventListener("click", () => {
+    stopSimulation()
+  })
+
+  run_btn.addEventListener("click", () => {
+    runSimulation()
+  })
 }
 
 function createMap() {
@@ -117,25 +173,22 @@ function showForm(){
 function hideMap() {
   const map = document.querySelector("#map-container")
 
+  nodes_array = []
   map.style.display = "none"
 }
 
 function showMap() {
   const map_container = document.querySelector("#map-container")
-  const run_btn = document.querySelector("#run-btn")
-
   map_container.style.display = "block"
-
-  run_btn.addEventListener("click", () => {
-    runSimulation()
-  })
 }
 
 function spreadInfection(nodes) {
   nodes.forEach(node => {
     if ((this.xpos >= node.xpos -10 && this.xpos <= node.xpos +10) &&
        (this.ypos >= node.ypos -10 && this.ypos <= node.ypos +10)) {
-      node.state = "infected"
+      if (node.state == "healthy") {
+        node.state = "infected" 
+      }
     }
   })
 }
@@ -160,9 +213,9 @@ function createNodes(simulation) {
     })
       .then(res => res.json())
       .then(node => {
-        renderNode.call(node)
         node["last_angle"] = 0
         nodes_array.push(node)
+        renderNodes.call(nodes_array)
       })
   }
 
@@ -185,23 +238,33 @@ function createNodes(simulation) {
     })
       .then(res => res.json())
       .then(node => {
-        renderNode.call(node)
         node["last_angle"] = 0
         nodes_array.push(node)
+        renderNodes.call(nodes_array)
       })
   }
 }
 
-function renderNode() {
+function renderNodes() {
   const map = document.querySelector("#map").getContext("2d")
 
-  switch(this.state) {
-    case "healthy": map.fillStyle = "#57f542"; break;
-    case "infected": map.fillStyle = "#ff2626"; break;
-  }
+  const infected_nodes = this.filter(node => node.state == "infected")
+  const healthy_nodes = this.filter(node => node.state == "healthy")
 
   map.beginPath()
-  map.arc(this.xpos, this.ypos, 4, 0, Math.PI * 2, true)
+  infected_nodes.forEach(node => {
+    map.moveTo(node.xpos, node.ypos)
+    map.arc(node.xpos, node.ypos, 4, 0, Math.PI * 2, true)
+    map.fillStyle = "#ff2626"
+  })
+  map.fill()
+
+  map.beginPath()
+  healthy_nodes.forEach(node => {
+    map.moveTo(node.xpos, node.ypos)
+    map.arc(node.xpos, node.ypos, 4, 0, Math.PI * 2, true)
+    map.fillStyle = "#57f542"
+  })
   map.fill()
 }
 
@@ -212,13 +275,11 @@ function refreshScreen() {
 }
 
 function renderScreen(nodes) {
-  nodes.forEach(node => {
-    renderNode.call(node)
-  })
+  renderNodes.call(nodes)
 }
 
 function killNode() {
-
+  this.state = "dead"
 }
 
 function checkNodeCollide(nx, ny) {
@@ -232,22 +293,21 @@ function checkNodeCollide(nx, ny) {
 }
 
 function moveNode() {
-
   if (Math.floor(Math.random() * 8) == 0) {
-    this.last_angle = Math.floor(Math.random() * 360)
+    this.last_angle = Math.floor(Math.random() * 359)
   }
 
   const radians = this.last_angle * Math.PI / 180
 
-  let nx = this.xpos + Math.cos(radians) * 4
-  let ny = this.ypos + Math.sin(radians) * 4
+  let nx = Math.floor(this.xpos + Math.cos(radians) * 4)
+  let ny = Math.floor(this.ypos + Math.sin(radians) * 4)
 
   if (!checkNodeCollide(nx, ny)) {
     this.xpos = nx
     this.ypos = ny
   } else {
-    let nx = this.xpos + -Math.cos(radians) * 2
-    let ny = this.ypos + -Math.sin(radians) * 2
+    let nx = Math.floor(this.xpos)// + -Math.cos(radians) * 2)
+    let ny = Math.floor(this.ypos)// + -Math.sin(radians) * 2)
     this.xpos = nx
     this.ypos = ny
   }
@@ -256,6 +316,9 @@ function moveNode() {
 function updateNode() {
   moveNode.call(this)
   if (this.state == "infected") {
+    if (Math.floor(Math.random() * 400) == 0) {
+      killNode.call(this)
+    }
     spreadInfection.call(this, nodes_array)
   }
   refreshScreen.call(map)
@@ -265,13 +328,22 @@ function stepSimulation() {
   const map = document.querySelector("#map")
   nodes_array.map(node => {
     updateNode.call(node)
-    refreshScreen.call(map)
   })
+  refreshScreen.call(map)
+}
+
+function stopSimulation() {
+  console.log("Stopping simulation...")
+  updateNodes()
+  clearInterval(loop)
 }
 
 function runSimulation() {
-  setInterval(() => {stepSimulation()}, 1)
+  clearInterval(loop)
+  loop = setInterval(() => {stepSimulation()}, 10)
 }
 
 createSimulation()
 getSimulation()
+createSimulationsButton()
+createMapButtons()
