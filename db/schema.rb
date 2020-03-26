@@ -41,7 +41,6 @@ ActiveRecord::Schema.define(version: 2020_03_26_151417) do
     t.integer "initial_infected"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "node_id"
     t.integer "initial_population"
   end
 

@@ -39,17 +39,18 @@ function getNodes() {
     })
 }
 
+//TODO: Saving does not work at all
+//PATCH returns original node
 function updateNodes() {
   console.log("Saving nodes...")
-  nodes_array.forEach(node => {
-    console.log(node)
+  nodes_array.map(node => {
     fetch(NODE_URL + "/" + node.id, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(node)
+      body: JSON.stringify({
+        state: "Da Fuck?"
+      })
     })
-      .then(res => res.json())
-      .then(node => console.log(node))
   })
   console.log("Nodes saved!")
 }
