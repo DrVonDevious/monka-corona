@@ -12,15 +12,21 @@ let loop = 0
 
 const scroll = document.querySelector("#scrollbox")
 
-
 let nodes_array = []
+
+function deleteSimulation() {
+  fetch(SIMULATIONS_URL + "/" + this.id, { method: "DELETE" })
+    .then(res => res.json())
+    .then(data => {
+      hideMap()
+    })
+}
 
 function getSimulation(){
   fetch(SIMULATIONS_URL)
   .then(res => res.json())
   .then(sims => {
     sims.forEach(sim => {
-      console.log(sim)
       showSimulations(sim)
     })
   })
@@ -40,19 +46,19 @@ function getNodes() {
     })
 }
 
-function updateNodes() {
-  console.log("Saving nodes...")
-  nodes_array.forEach(node => {
-    debugger
-    fetch(NODE_URL + "/" + node.id, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(node)
+//TODO: Saving does not work at all
+//PATCH returns original node
+function saveNode() {
+  console.log(this)
+  fetch(NODE_URL + "/" + this.id, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      state: "testing"
     })
-      .then(res => res.json())
-      .then(node => console.log(node))
   })
-  console.log("Nodes saved!")
+    .then(res => res.json())
+    .then(node => console.log(node))
 }
 
 function showSimulations(simulation) {
@@ -97,7 +103,6 @@ function createSimulationsButton() {
 function hideSim() {
   scroll.style.display = "none"
 }
-
 
 function createSimulation() {
   const form_submit = document.querySelector("#form-submit")
@@ -336,7 +341,11 @@ function stepSimulation() {
 
 function stopSimulation() {
   console.log("Stopping simulation...")
-  updateNodes()
+
+  nodes_array.map(node => {
+    saveNode.call(node)
+  })
+
   clearInterval(loop)
 }
 

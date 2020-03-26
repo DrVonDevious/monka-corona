@@ -8,10 +8,12 @@ class NodesController < ApplicationController
   end
 
   def show
+    node = Node.find(params[:id])
     render json: node
   end
 
   def update
+    node = Node.find(params[:id])
     render json: node
   end
 

@@ -17,6 +17,11 @@ class SimulationsController < ApplicationController
     render json: simulation
   end
 
+  def destroy
+    simulation = Simulation.find(params[:id])
+    render json: simulation
+  end
+
   private
 
   def strong_params
