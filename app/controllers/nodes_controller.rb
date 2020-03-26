@@ -7,6 +7,14 @@ class NodesController < ApplicationController
     render json: nodes
   end
 
+  def show
+    render json: node
+  end
+
+  def update
+    render json: node
+  end
+
   def create
     node = Node.create!(strong_params)
     render json: node

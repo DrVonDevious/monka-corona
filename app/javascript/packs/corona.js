@@ -33,6 +33,18 @@ function getNodes() {
     })
 }
 
+function updateNodes() {
+  console.log("Saving nodes...")
+  nodes_array.forEach(node => {
+    fetch(NODE_URL + "/" + node.id, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(node)
+    })
+  })
+  console.log("Nodes saved!")
+}
+
 function showSimulations(simulation){
   // const scroll = document.querySelector("#scrollbox")
   const sim = document.createElement("div")
@@ -63,6 +75,7 @@ function createSimulationsButton() {
   let sim_btn = document.querySelector("#sims")
   sim_btn.addEventListener("click", () => {
     scroll.style.display = "block"
+    updateNodes()
     hideMap()
     showForm()
     getSimulation()
@@ -140,9 +153,15 @@ function hideMap() {
 
 function showMap() {
   const map_container = document.querySelector("#map-container")
+
+  const stop_button = document.querySelector("#stop-btn")
   const run_btn = document.querySelector("#run-btn")
 
   map_container.style.display = "block"
+
+  stop_button.addEventListener("click", () => {
+    stopSimulation()
+  })
 
   run_btn.addEventListener("click", () => {
     runSimulation()
@@ -299,7 +318,13 @@ function stepSimulation() {
   refreshScreen.call(map)
 }
 
+function stopSimulation() {
+  console.log("Stopping simulation...")
+  clearInterval(0)
+}
+
 function runSimulation() {
+  clearInterval(0)
   setInterval(() => {stepSimulation()}, 10)
 }
 
