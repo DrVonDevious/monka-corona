@@ -3,8 +3,8 @@ const SIMULATIONS_URL = "http://localhost:3000/simulations"
 const MAPS_URL = "http://localhost:3000/maps"
 const NODE_URL = "http://localhost:3000/nodes"
 
-const MAP_WIDTH = 800
-const MAP_HEIGHT = 600
+const MAP_WIDTH = 1090
+const MAP_HEIGHT = 800
 
 const ACTIVE_SIMULATIONS = []
 
@@ -64,12 +64,14 @@ function showSimulations(simulation) {
   time.innerText = `Time: ${simulation.time_running}`
   const initial = document.createElement("p")
   initial.innerText = `initial_infected: ${simulation.initial_infected}`
+  const pop = document.createElement("p")
+  pop.innerText = `Population: ${simulation.initial_population}`
 
   sim.addEventListener("click", () => {
     getNodes.call(simulation)
   })
 
-  scroll.append(name,time,initial)
+  sim.append(name,time,initial,pop)
   scroll.append(sim)
 }
 
@@ -86,7 +88,7 @@ function createSimulationsButton() {
   sim_btn.addEventListener("click", () => {
     scroll.style.display = "block"
     stopSimulation()
-    hideMap()
+    // hideMap()
     showForm()
     getSimulation()
   })
@@ -155,7 +157,7 @@ function createMap() {
     .then(res => res.json())
     .then(map => {
       createNodes.call(map, this)
-      hideSim()
+      // hideSim()
       showMap()
     })
 }
