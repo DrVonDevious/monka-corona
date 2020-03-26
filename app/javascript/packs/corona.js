@@ -23,16 +23,18 @@ function getSimulation(){
 function showSimulations(simulation){
   // const scroll = document.querySelector("#scrollbox")
   const sim = document.createElement("div")
+  const a = document.createElement("a")
   const name = document.createElement("h1")
   name.innerText = `Name: ${simulation.name}`
+  name.className = "name"
   const time = document.createElement("p")
   time.innerText = `Time: ${simulation.time_running}`
   const initial = document.createElement("p")
   initial.innerText = `initial_infected: ${simulation.initial_infected}`
 
   
-
-  sim.append(name,time,initial)
+  a.append(name)
+  sim.append(a,time,initial)
   scroll.append(sim)
 
 }
@@ -63,6 +65,7 @@ function createSimulation() {
 
 function postSimulation() {
   console.log("Posting object to: " + SIMULATIONS_URL)
+  console.log(this.parentNode[2].value)
   fetch(SIMULATIONS_URL, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
@@ -70,11 +73,13 @@ function postSimulation() {
       name: this.parentNode[0].value,
       initial_infected: parseInt(this.parentNode[1].value),
       time_running: 0,
-      is_running: true
+      is_running: true,
+      initial_population: parseInt(this.parentNode[2].value)
     })
   })
     .then(res => res.json())
     .then(simulation => {
+      console.log(simulation)
       createMap.call(simulation)
     })
 }
@@ -144,7 +149,7 @@ function createNodes(simulation) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: "Test Node",
+        name: "Test node",
         age: rand_age,
         state: "infected",
         xpos: rand_x,
@@ -161,7 +166,7 @@ function createNodes(simulation) {
   }
 
   console.log("generating healthy nodes..")
-  for (let i = 0; i < 100 - simulation.initial_infected; i++) {
+  for (let i = 0; i < simulation.initial_population - simulation.initial_infected; i++) {
     let rand_x = Math.floor(Math.random() * MAP_WIDTH)
     let rand_y = Math.floor(Math.random() * MAP_HEIGHT)
     let rand_age = Math.floor(Math.random() * 85)
@@ -169,7 +174,7 @@ function createNodes(simulation) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: "Test Node",
+        name: "Test name",
         age: rand_age,
         state: "healthy",
         xpos: rand_x,
