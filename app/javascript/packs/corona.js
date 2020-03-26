@@ -21,8 +21,7 @@ function getSimulation(){
 }
 
 function showSimulations(simulation){
-  // const scroll = document.querySelector("#scrollbox")
-  const sim = document.createElement("div")
+  // const sim = document.createElement("div")
   const a = document.createElement("a")
   const name = document.createElement("h1")
   name.innerText = `Name: ${simulation.name}`
@@ -34,15 +33,17 @@ function showSimulations(simulation){
 
   
   a.append(name)
-  sim.append(a,time,initial)
-  scroll.append(sim)
+  scroll.append(a,time,initial)
+  // scroll.append(sim)
+
 
 }
 
   let sim_btn = document.querySelector("#sims")
   sim_btn.addEventListener("click", () => {
     scroll.style.display = "block"
-    hideMap()
+    // hideMap()
+    scroll.innerHTML =""
     showForm()
     getSimulation()
   })
@@ -273,3 +274,4 @@ function runSimulation() {
 }
 
 createSimulation()
+getSimulation()
