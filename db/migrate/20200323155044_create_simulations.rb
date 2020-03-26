@@ -1,4 +1,4 @@
-class CreateSimulations < ActiveRecord::Migration[6.0]
+add class CreateSimulations < ActiveRecord::Migration[6.0]
   def change
     create_table :simulations do |t|
       t.string :name

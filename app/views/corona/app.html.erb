@@ -34,6 +34,9 @@
         <label>Initial Infected</label>
         <input id="infected" type="number">
         <br>
+        <label>Initial Population</label>
+        <input id="population" type="number">
+        <br>
         <input id="form-submit" type="submit">
       </form>
     </div>
@@ -48,12 +51,12 @@
     </div>
 
     <%# Index of all the simulations %>
-    <div id="simulations-container">
+    <%# <div id="simulations-container"> %>
       <div id="scrollbox">
         <%# Insert simulation list items here with JS %>
          
       </div>
-    </div>
+    <%# </div> %>
 
     <%= javascript_pack_tag "corona" %>
   </body>
