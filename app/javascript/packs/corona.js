@@ -20,7 +20,6 @@ function getSimulation(){
   .then(res => res.json())
   .then(sims => {
     sims.forEach(sim => {
-      console.log(sim)
       showSimulations(sim)
     })
   })
@@ -43,7 +42,7 @@ function getNodes() {
 function updateNodes() {
   console.log("Saving nodes...")
   nodes_array.forEach(node => {
-    debugger
+    console.log(node)
     fetch(NODE_URL + "/" + node.id, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
