@@ -23,6 +23,16 @@ function getSimulation(){
   })
 }
 
+function getNodes() {
+  fetch(NODE_URL)
+    .then(res => res.json())
+    .then(nodes => {
+      let map_nodes = nodes.filter(node => node.map_id == this.id)
+      nodes_array = []
+      nodes_array.push(...map_nodes)
+    })
+}
+
 function showSimulations(simulation){
   // const scroll = document.querySelector("#scrollbox")
   const sim = document.createElement("div")
@@ -33,13 +43,23 @@ function showSimulations(simulation){
   const initial = document.createElement("p")
   initial.innerText = `initial_infected: ${simulation.initial_infected}`
 
-  
+  sim.addEventListener("click", () => {
+    loadSimulation.call(simulation)
+  })
 
   sim.append(name,time,initial)
   scroll.append(sim)
-
 }
 
+function loadSimulation() {
+  const map = document.querySelector("#map")
+  hideSim()
+  getNodes.call(this)
+  showMap()
+  refreshScreen.call(map)
+}
+
+function createSimulationsButton() {
   let sim_btn = document.querySelector("#sims")
   sim_btn.addEventListener("click", () => {
     scroll.style.display = "block"
@@ -47,11 +67,11 @@ function showSimulations(simulation){
     showForm()
     getSimulation()
   })
+}
 
-
-  function hideSim() {
-    scroll.style.display = "none"
-  }
+function hideSim() {
+  scroll.style.display = "none"
+}
 
 
 function createSimulation() {
@@ -195,7 +215,6 @@ function createNodes(simulation) {
 function renderNodes() {
   const map = document.querySelector("#map").getContext("2d")
 
-
   const infected_nodes = this.filter(node => node.state == "infected")
   const healthy_nodes = this.filter(node => node.state == "healthy")
 
@@ -276,8 +295,8 @@ function stepSimulation() {
   const map = document.querySelector("#map")
   nodes_array.map(node => {
     updateNode.call(node)
-    refreshScreen.call(map)
   })
+  refreshScreen.call(map)
 }
 
 function runSimulation() {
@@ -285,3 +304,4 @@ function runSimulation() {
 }
 
 createSimulation()
+createSimulationsButton()
