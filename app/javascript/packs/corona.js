@@ -8,6 +8,8 @@ const MAP_HEIGHT = 600
 
 const ACTIVE_SIMULATIONS = []
 
+let loop = 0
+
 const scroll = document.querySelector("#scrollbox")
 
 
@@ -18,6 +20,7 @@ function getSimulation(){
   .then(res => res.json())
   .then(sims => {
     sims.forEach(sim => {
+      console.log(sim)
       showSimulations(sim)
     })
   })
@@ -28,25 +31,31 @@ function getNodes() {
     .then(res => res.json())
     .then(nodes => {
       let map_nodes = nodes.filter(node => node.map_id == this.id)
-      nodes_array = []
+      map_nodes.forEach(node => node["last_angle"] = 1)
       nodes_array.push(...map_nodes)
+      const map = document.querySelector("#map")
+      hideSim()
+      showMap()
+      refreshScreen.call(map)
     })
 }
 
 function updateNodes() {
   console.log("Saving nodes...")
   nodes_array.forEach(node => {
+    debugger
     fetch(NODE_URL + "/" + node.id, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(node)
     })
+      .then(res => res.json())
+      .then(node => console.log(node))
   })
   console.log("Nodes saved!")
 }
 
-function showSimulations(simulation){
-  // const scroll = document.querySelector("#scrollbox")
+function showSimulations(simulation) {
   const sim = document.createElement("div")
   const name = document.createElement("h1")
   name.innerText = `Name: ${simulation.name}`
@@ -56,7 +65,7 @@ function showSimulations(simulation){
   initial.innerText = `initial_infected: ${simulation.initial_infected}`
 
   sim.addEventListener("click", () => {
-    loadSimulation.call(simulation)
+    getNodes.call(simulation)
   })
 
   sim.append(name,time,initial)
@@ -75,7 +84,7 @@ function createSimulationsButton() {
   let sim_btn = document.querySelector("#sims")
   sim_btn.addEventListener("click", () => {
     scroll.style.display = "block"
-    updateNodes()
+    stopSimulation()
     hideMap()
     showForm()
     getSimulation()
@@ -113,6 +122,19 @@ function postSimulation() {
     .then(simulation => {
       createMap.call(simulation)
     })
+}
+
+function createMapButtons() {
+  const stop_button = document.querySelector("#stop-btn")
+  const run_btn = document.querySelector("#run-btn")
+
+  stop_button.addEventListener("click", () => {
+    stopSimulation()
+  })
+
+  run_btn.addEventListener("click", () => {
+    runSimulation()
+  })
 }
 
 function createMap() {
@@ -153,19 +175,7 @@ function hideMap() {
 
 function showMap() {
   const map_container = document.querySelector("#map-container")
-
-  const stop_button = document.querySelector("#stop-btn")
-  const run_btn = document.querySelector("#run-btn")
-
   map_container.style.display = "block"
-
-  stop_button.addEventListener("click", () => {
-    stopSimulation()
-  })
-
-  run_btn.addEventListener("click", () => {
-    runSimulation()
-  })
 }
 
 function spreadInfection(nodes) {
@@ -280,7 +290,7 @@ function checkNodeCollide(nx, ny) {
 
 function moveNode() {
   if (Math.floor(Math.random() * 8) == 0) {
-    this.last_angle = Math.floor(Math.random() * 360)
+    this.last_angle = Math.floor(Math.random() * 359)
   }
 
   const radians = this.last_angle * Math.PI / 180
@@ -292,8 +302,8 @@ function moveNode() {
     this.xpos = nx
     this.ypos = ny
   } else {
-    let nx = this.xpos + -Math.cos(radians) * 2
-    let ny = this.ypos + -Math.sin(radians) * 2
+    let nx = Math.floor(this.xpos)// + -Math.cos(radians) * 2)
+    let ny = Math.floor(this.ypos)// + -Math.sin(radians) * 2)
     this.xpos = nx
     this.ypos = ny
   }
@@ -320,13 +330,15 @@ function stepSimulation() {
 
 function stopSimulation() {
   console.log("Stopping simulation...")
-  clearInterval(0)
+  updateNodes()
+  clearInterval(loop)
 }
 
 function runSimulation() {
-  clearInterval(0)
-  setInterval(() => {stepSimulation()}, 10)
+  clearInterval(loop)
+  loop = setInterval(() => {stepSimulation()}, 10)
 }
 
 createSimulation()
 createSimulationsButton()
+createMapButtons()
