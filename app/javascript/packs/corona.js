@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch(SIMULATIONS_URL + "/" + this.id, { method: "DELETE" })
       .then(res => res.json())
       .then(data => {
+        console.log("Simulation deleted!")
         hideMap()
       })
   }
@@ -170,6 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function createMapButtons() {
     const stop_button = document.querySelector("#stop-btn")
     const run_btn = document.querySelector("#run-btn")
+    const delete_btn = document.querySelector("#delete-btn")
 
     stop_button.addEventListener("click", () => {
       stopSimulation()
@@ -178,6 +180,12 @@ document.addEventListener("DOMContentLoaded", () => {
     run_btn.addEventListener("click", () => {
       runSimulation()
     })
+
+    delete_btn.addEventListener("click", () => {
+      // deleteSimulation.call(CURRENT_SIMULATION)
+      console.log("pressed!")
+    })
+
   }
 
   function createMap() {
