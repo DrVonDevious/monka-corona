@@ -64,13 +64,18 @@ function saveNode() {
 function showSimulations(simulation) {
   const sim = document.createElement("div")
   const name = document.createElement("h1")
-  name.innerText = `Name: ${simulation.name}`
-  name.className = "name"
   const time = document.createElement("p")
-  time.innerText = `Time: ${simulation.time_running}`
   const initial = document.createElement("p")
-  initial.innerText = `initial_infected: ${simulation.initial_infected}`
   const pop = document.createElement("p")
+
+  name.className = "name"
+  time.className = "time"
+  initial.className = "initial"
+  pop.className = "population"
+
+  name.innerText = `Name: ${simulation.name}`
+  time.innerText = `Time: ${simulation.time_running}`
+  initial.innerText = `initial_infected: ${simulation.initial_infected}`
   pop.innerText = `Population: ${simulation.initial_population}`
 
   sim.addEventListener("click", () => {
