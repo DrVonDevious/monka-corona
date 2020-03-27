@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pop.className = "population"
     line.className = "line-divider"
 
-    name.innerText = `Name: ${simulation.name}`
+    name.innerText = `${simulation.name}`
     time.innerText = `Time: ${simulation.time_running}`
     initial.innerText = `initial_infected: ${simulation.initial_infected}`
     pop.innerText = `Population: ${simulation.initial_population}`
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
     infected.className = "stat-infected"
     line.className = "stat-line"
 
-    name.innerText = "Name: " + this.name
+    name.innerText = this.name
     pop.innerText = "Population: " + this.initial_population
     time.innerText = "Time: " + 0
     healthy.innerText = "Healthy: " + (this.initial_population - this.initial_infected)
@@ -354,6 +354,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(res => res.json())
         .then(node => {
           node["last_angle"] = 0
+          nodes_array = []
           nodes_array.push(node)
           renderNodes.call(nodes_array)
         })
