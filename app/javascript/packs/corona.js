@@ -96,11 +96,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const div = document.createElement("div")
     const name = document.createElement('h1')
     const time = document.createElement("p")
-    
-    name.innerText = `${this.name}`
-    
+    const pop = document.createElement("p")
+    const line = document.createElement("hr")
 
-    div.append(name, time)
+    name.className = "stat-name"
+    time.className = "stat-time"
+    pop.className = "stat-population"
+    line.className = "stat-line"
+    
+    name.innerText = "Name: " + this.name
+    time.innerText = "Time: " + this.time_running
+    pop.innerText = "Population: " + this.pop
+
+
+    div.append(name, time, pop, line)
     stats.append(div)
   }
 
@@ -187,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
         createNodes.call(map, this)
         hideSim()
         showMap()
-        showStats(this)
+        showStats.call(this)
       })
   }
 
