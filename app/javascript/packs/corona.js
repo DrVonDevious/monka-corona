@@ -116,7 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function createSimulation() {
     const form_submit = document.querySelector("#form-submit")
 
-    debugger
     form_submit.addEventListener("click", () => {
       event.preventDefault()
       postSimulation.call(form_submit)
@@ -126,16 +125,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function postSimulation() {
     console.log("Posting object to: " + SIMULATIONS_URL)
-    console.log(this.parentNode[2].value)
+    console.log(this.parentNode.parentNode[2].value)
     fetch(SIMULATIONS_URL, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        name: this.parentNode[0].value,
-        initial_infected: parseInt(this.parentNode[1].value),
+        name: this.parentNode.parentNode[0].value,
+        initial_infected: parseInt(this.parentNode.parentNode[1].value),
         time_running: 0,
         is_running: true,
-        initial_population: parseInt(this.parentNode[2].value)
+        initial_population: parseInt(this.parentNode.parentNode[2].value)
       })
     })
       .then(res => res.json())
