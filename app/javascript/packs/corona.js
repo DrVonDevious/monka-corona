@@ -14,13 +14,6 @@ const scroll = document.querySelector("#scrollbox")
 
 let nodes_array = []
 
-function deleteSimulation() {
-  fetch(SIMULATIONS_URL + "/" + this.id, { method: "DELETE" })
-    .then(res => res.json())
-    .then(data => {
-      hideMap()
-    })
-}
 
 function getSimulation(){
   fetch(SIMULATIONS_URL)
