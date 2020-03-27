@@ -16,15 +16,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const scroll = document.querySelector("#scrollbox")
   const stats = document.querySelector("#stats")
 
-
   let nodes_array = []
 
   function deleteSimulation() {
     fetch(SIMULATIONS_URL + "/" + this.id, { method: "DELETE" })
       .then(res => res.json())
       .then(data => {
+        stopSimulation()
         console.log("Simulation deleted!")
         hideMap()
+        hideControls()
+        scroll.style.display = "block"
       })
   }
 
@@ -100,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let current_pop = nodes_array.filter(node => node.state == "healthy" || node.state == "infected").length
     let current_healthy = nodes_array.filter(node => node.state == "healthy").length
     let current_infected = nodes_array.filter(node => node.state == "infected").length
-    
+
     const time = document.querySelector("#time-stat")
     const pop = document.querySelector("#pop-stat")
     const healthy = document.querySelector("#healthy-stat")
@@ -110,10 +112,12 @@ document.addEventListener("DOMContentLoaded", () => {
     pop.innerText = "Population: " + current_pop
     healthy.innerText = "Healthy: " + current_healthy
     infected.innerText = "Infected: " + current_infected
-
   }
 
-  function showStats(){
+  function showStats() {
+
+    stats.innerHTML = ""
+
     const div = document.createElement("div")
     const name = document.createElement('h1')
     const time = document.createElement("p")
@@ -133,16 +137,28 @@ document.addEventListener("DOMContentLoaded", () => {
     healthy.className = "stat-healthy"
     infected.className = "stat-infected"
     line.className = "stat-line"
-    
+
     name.innerText = "Name: " + this.name
     pop.innerText = "Population: " + this.initial_population
     time.innerText = "Time: " + 0
-    healthy.innerText = "Healthy" + (this.initial_population - this.initial_infected)
+    healthy.innerText = "Healthy: " + (this.initial_population - this.initial_infected)
+    infected.innerText = "Infected: " + (this.initial_infected)
 
-    div.append(name, time, pop, healthy, line)
+    div.append(name, time, pop, healthy, infected, line)
     stats.append(div)
+
+    showControls()
   }
 
+  function hideControls() {
+    const controls = document.querySelector("#control-panel")
+    controls.style.display = "none"
+  }
+
+  function showControls() {
+    const controls = document.querySelector("#control-panel")
+    controls.style.display = "block"
+  }
 
   function createSimulationsButton() {
     let sim_btn = document.querySelector("#sims")
@@ -204,10 +220,8 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     delete_btn.addEventListener("click", () => {
-      // deleteSimulation.call(CURRENT_SIMULATION)
-      console.log("pressed!")
+      deleteSimulation.call(CURRENT_SIMULATION)
     })
-
   }
 
   function createMap() {
