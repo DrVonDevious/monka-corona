@@ -1,5 +1,4 @@
 
-
 body {
   overflow:hidden;
   background-color: black;
@@ -8,16 +7,50 @@ body {
   background-size: 140%;
 }
 
-
 label{
   color: black;
 }
 
+p {
+  color: #d8c493;
+}
+
+#icon {
+  max-width: 100%;
+  max-height: 100%;
+}
+
 #simulation-form-container {
-  background-color: white;
+  border-radius: 8px;
+  background-color: #2f2f2a;
+  box-shadow: 0px 0px 40px 1px black;
   position: absolute;
-  top: 50%;
-  left: 51%;
+  width: 40%;
+  height: 50%;
+  top: 30%;
+  left: 42%;
+}
+
+#simulation-form {
+  text-align: center;
+  width: 60%;
+  position: relative;
+  left: 20%;
+  top: 30px;
+}
+
+#form-label {
+  color: wheat;
+  padding-top: 12px;
+  width: 100%;
+  font-size: 14pt;
+}
+
+#form-submit {
+  background-color: #1f1f1a;
+  color: wheat;
+  padding: 8px 25px;
+  margin-top: 24px;
 }
 
 #node {
@@ -35,7 +68,7 @@ label{
 
 #map {
   position: relative;
-  background-color: black;
+  background-color: #0e0e0e;
   left:348px;
   top: -21px;
   // width: 100%;
@@ -53,23 +86,61 @@ label{
 #scrollbox {
   // display: none;
   overflow: scroll;
-  width: 335px;
-  height: 765px;
-  background-color: gray;
+  width: 348px;
+  height: 771px;
+  box-shadow: 10px 10px 30px black;
+  background-color: #1f1f1a;
   position: fixed;
-  left: 7px;
-  top: 53px;
-  }
+  left: 0px;
+  top: 50px;
+}
 
-  .name{
-    text-decoration: none;
-    color: black;
-  }
+.name {
+  padding-left: 14px;
+  text-decoration: none;
+  color: #d8c493;
+}
 
-  #control-panel{
-    position: relative;
-    top: 50%;
-    left: 50%
-  }
+.time {
+  padding-left: 20px;
+}
 
- 
+.initial {
+  padding-left: 20px;
+}
+
+.population {
+  padding-left: 20px;
+}
+
+.line-divider {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+#control-panel {
+  position: relative;
+  background-color: #181717;
+  top: 50%;
+  left: 50%
+}
+
+#navbar {
+  display: inline-block;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #2f2f2a;
+  box-shadow: 10px 5px 20px black;
+}
+
+#new {
+  color: #f13128;
+}
+
+#sims {
+  color: #f13128;
+}
+
