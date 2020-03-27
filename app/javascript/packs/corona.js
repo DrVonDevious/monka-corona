@@ -114,17 +114,20 @@ document.addEventListener("DOMContentLoaded", () => {
     scroll.append(sim)
   }
 
+  
+  
   function updateStats() {
     let current_pop = nodes_array.filter(node => node.state == "healthy" || node.state == "infected").length
     let current_healthy = nodes_array.filter(node => node.state == "healthy").length
     let current_infected = nodes_array.filter(node => node.state == "infected").length
-
+    // let current_time = setInterval(increment, 1000)
+    
     const time = document.querySelector("#time-stat")
     const pop = document.querySelector("#pop-stat")
     const healthy = document.querySelector("#healthy-stat")
     const infected = document.querySelector("#infected-stat")
 
-    time.innerText = "Time: " + this.time_running
+    time.innerText = "Time: " + current_time
     pop.innerText = "Population: " + current_pop
     healthy.innerText = "Healthy: " + current_healthy
     infected.innerText = "Infected: " + current_infected
@@ -157,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pop.innerText = "Population: " + this.initial_population
     time.innerText = "Time: " + 0
     healthy.innerText = "Healthy: " + (this.initial_population - this.initial_infected)
-    infected.innerText = "Infected: " + (this.initial_infected)
+    infected.innerText = "Infected: " + this.initial_infected
 
     div.append(name, time, pop, healthy, infected, line)
     stats.append(div)
