@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Simulation deleted!")
         removeSimulationListing.call(this)
         hideMap()
+        showForm()
         hideControls()
         scroll.style.display = "block"
         nodes_array = []
@@ -183,8 +184,21 @@ document.addEventListener("DOMContentLoaded", () => {
     sim_btn.addEventListener("click", () => {
       scroll.style.display = "block"
       stopSimulation()
-      // hideMap()
       showForm()
+      scroll.innerHTML = ""
+      getSimulation()
+    })
+  }
+
+  function newSimulationButton() {
+    let new_btn = document.querySelector("#new")
+    new_btn.addEventListener("click", () => {
+      stopSimulation()
+      hideMap()
+      showForm()
+      scroll.innerHTML = ""
+      scroll.style.display = "block"
+      hideControls()
       getSimulation()
     })
   }
@@ -454,6 +468,7 @@ document.addEventListener("DOMContentLoaded", () => {
   createSimulation()
   getSimulation()
   createSimulationsButton()
+  newSimulationButton()
   createMapButtons()
 
 })
