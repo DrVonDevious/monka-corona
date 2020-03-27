@@ -121,10 +121,13 @@ p {
 }
 
 #control-panel {
-  position: relative;
-  background-color: #181717;
-  top: 50%;
-  left: 50%
+  width: 348px;
+  height: 771px;
+  box-shadow: 10px 10px 30px black;
+  background-color: #1f1f1a;
+  position: fixed;
+  left: 0px;
+  top: 50px;
 }
 
 #navbar {

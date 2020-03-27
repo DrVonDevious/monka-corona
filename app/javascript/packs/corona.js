@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let loop = 0
 
   const scroll = document.querySelector("#scrollbox")
+  const stats = document.querySelector("#stats")
+
 
   let nodes_array = []
 
@@ -90,6 +92,18 @@ document.addEventListener("DOMContentLoaded", () => {
     scroll.append(sim)
   }
 
+  function showStats(){
+    const div = document.createElement("div")
+    const name = document.createElement('h1')
+    const time = document.createElement("p")
+    
+    name.innerText = `${this.name}`
+    
+
+    div.append(name, time)
+    stats.append(div)
+  }
+
   function loadSimulation() {
     const map = document.querySelector("#map")
     hideSim()
@@ -116,7 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function createSimulation() {
     const form_submit = document.querySelector("#form-submit")
 
-    debugger
     form_submit.addEventListener("click", () => {
       event.preventDefault()
       postSimulation.call(form_submit)
@@ -172,8 +185,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(res => res.json())
       .then(map => {
         createNodes.call(map, this)
-        // hideSim()
+        hideSim()
         showMap()
+        showStats(this)
       })
   }
 
