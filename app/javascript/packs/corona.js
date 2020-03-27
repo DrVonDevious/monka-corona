@@ -24,9 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(data => {
         stopSimulation()
         console.log("Simulation deleted!")
+        removeSimulationListing.call(this)
         hideMap()
         hideControls()
         scroll.style.display = "block"
+        nodes_array = []
       })
   }
 
@@ -40,12 +42,20 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
+  function removeSimulationListing() {
+    const div = document.querySelector(`#simulation-${this.id}`)
+    if (div) {
+      div.remove()
+    }
+  }
+
   function getNodes() {
     fetch(NODE_URL)
       .then(res => res.json())
       .then(nodes => {
         let map_nodes = nodes.filter(node => node.map_id == this.id)
         map_nodes.forEach(node => node["last_angle"] = 1)
+        nodes_array = []
         nodes_array.push(...map_nodes)
         const map = document.querySelector("#map")
         hideSim()
@@ -63,11 +73,15 @@ document.addEventListener("DOMContentLoaded", () => {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        state: "testing"
+        state: this.state,
+        name: this.name,
+        xpos: this.xpos,
+        ypos: this.ypos,
+        age: this.age
       })
     })
       .then(res => res.json())
-      .then(node => console.log(node))
+      .then(node => {})
   }
 
   function showSimulations(simulation) {
@@ -77,6 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const initial = document.createElement("p")
     const pop = document.createElement("p")
     const line = document.createElement("hr")
+
+    sim.id = "simulation-" + simulation.id
 
     name.className = "name"
     time.className = "time"
@@ -115,7 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showStats() {
-
     stats.innerHTML = ""
 
     const div = document.createElement("div")
@@ -203,6 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(simulation => {
         console.log(simulation)
         createMap.call(simulation)
+        CURRENT_SIMULATION = simulation
       })
   }
 

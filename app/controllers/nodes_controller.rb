@@ -15,6 +15,7 @@ class NodesController < ApplicationController
   def update
     node = Node.find(params[:id])
     render json: node
+    node.update(strong_params)
   end
 
   def create

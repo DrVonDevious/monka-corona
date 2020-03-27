@@ -20,6 +20,7 @@ class SimulationsController < ApplicationController
   def destroy
     simulation = Simulation.find(params[:id])
     render json: simulation
+    simulation.destroy
   end
 
   private
