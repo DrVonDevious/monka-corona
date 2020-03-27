@@ -7,6 +7,7 @@ const MAP_WIDTH = 1090
 const MAP_HEIGHT = 800
 
 const ACTIVE_SIMULATIONS = []
+let CURRENT_SIMULATION = 0
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -46,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const map = document.querySelector("#map")
         hideSim()
         showMap()
+        showStats.call(this)
         refreshScreen.call(map)
       })
   }
@@ -86,10 +88,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     sim.addEventListener("click", () => {
       getNodes.call(simulation)
+      CURRENT_SIMULATION = simulation
     })
 
     sim.append(name,time,initial,pop, line)
     scroll.append(sim)
+  }
+
+  function updateStats() {
+    let current_pop = nodes_array.filter(node => node.state == "healthy" || node.state == "infected").length
+    let current_healthy = nodes_array.filter(node => node.state == "healthy").length
+    let current_infected = nodes_array.filter(node => node.state == "infected").length
+    
+    const time = document.querySelector("#time-stat")
+    const pop = document.querySelector("#pop-stat")
+    const healthy = document.querySelector("#healthy-stat")
+    const infected = document.querySelector("#infected-stat")
+
+    time.innerText = "Time: " + this.time_running
+    pop.innerText = "Population: " + current_pop
+    healthy.innerText = "Healthy: " + current_healthy
+    infected.innerText = "Infected: " + current_infected
+
   }
 
   function showStats(){
@@ -97,29 +117,31 @@ document.addEventListener("DOMContentLoaded", () => {
     const name = document.createElement('h1')
     const time = document.createElement("p")
     const pop = document.createElement("p")
+    const healthy = document.createElement("p")
+    const infected = document.createElement("p")
     const line = document.createElement("hr")
+
+    pop.id = "pop-stat"
+    healthy.id = "healthy-stat"
+    infected.id = "infected-stat"
+    time.id = "time-stat"
 
     name.className = "stat-name"
     time.className = "stat-time"
     pop.className = "stat-population"
+    healthy.className = "stat-healthy"
+    infected.className = "stat-infected"
     line.className = "stat-line"
     
     name.innerText = "Name: " + this.name
-    time.innerText = "Time: " + this.time_running
-    pop.innerText = "Population: " + this.pop
+    pop.innerText = "Population: " + this.initial_population
+    time.innerText = "Time: " + 0
+    healthy.innerText = "Healthy" + (this.initial_population - this.initial_infected)
 
-
-    div.append(name, time, pop, line)
+    div.append(name, time, pop, healthy, line)
     stats.append(div)
   }
 
-  function loadSimulation() {
-    const map = document.querySelector("#map")
-    hideSim()
-    getNodes.call(this)
-    showMap()
-    refreshScreen.call(map)
-  }
 
   function createSimulationsButton() {
     let sim_btn = document.querySelector("#sims")
@@ -366,6 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function stepSimulation() {
     const map = document.querySelector("#map")
+    updateStats.call(CURRENT_SIMULATION)
     nodes_array.map(node => {
       updateNode.call(node)
     })
