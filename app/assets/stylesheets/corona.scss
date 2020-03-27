@@ -169,6 +169,33 @@ p {
   box-shadow: 10px 5px 20px black;
 }
 
+#run-btn {
+  position: relative;
+  left: 25px;
+  background-color: #171712;
+  color: wheat;
+  padding: 8px 25px;
+  margin-top: 24px;
+}
+
+#stop-btn {
+  position: relative;
+  left: 45px;
+  background-color: #171712;
+  color: wheat;
+  padding: 8px 25px;
+  margin-top: 24px;
+}
+
+#delete-btn {
+  position: relative;
+  left: 65px;
+  background-color: #171712;
+  color: wheat;
+  padding: 8px 25px;
+  margin-top: 24px;
+}
+
 .navbar-inverse {
   display: inline-block;
 }
