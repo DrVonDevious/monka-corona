@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let loop = 0
 
   const scroll = document.querySelector("#scrollbox")
+  const stats = document.querySelector("#stats")
+
 
   let nodes_array = []
 
@@ -88,6 +90,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     sim.append(name,time,initial,pop, line)
     scroll.append(sim)
+  }
+
+  function showStats(){
+    const div = document.createElement("div")
+    const name = document.createElement('h1')
+    const time = document.createElement("p")
+    
+    name.innerText = `${this.name}`
+    
+
+    div.append(name, time)
+    stats.append(div)
   }
 
   function loadSimulation() {
@@ -171,8 +185,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(res => res.json())
       .then(map => {
         createNodes.call(map, this)
-        // hideSim()
+        hideSim()
         showMap()
+        showStats(this)
       })
   }
 
