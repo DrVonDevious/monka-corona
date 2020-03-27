@@ -115,20 +115,18 @@ document.addEventListener("DOMContentLoaded", () => {
     scroll.append(sim)
   }
 
-  
-  
   function updateStats() {
     let current_pop = nodes_array.filter(node => node.state == "healthy" || node.state == "infected").length
     let current_healthy = nodes_array.filter(node => node.state == "healthy").length
     let current_infected = nodes_array.filter(node => node.state == "infected").length
     // let current_time = setInterval(increment, 1000)
-    
+
     const time = document.querySelector("#time-stat")
     const pop = document.querySelector("#pop-stat")
     const healthy = document.querySelector("#healthy-stat")
     const infected = document.querySelector("#infected-stat")
 
-    time.innerText = "Time: " + current_time
+    time.innerText = "Time: " + this.time_running
     pop.innerText = "Population: " + current_pop
     healthy.innerText = "Healthy: " + current_healthy
     infected.innerText = "Infected: " + current_infected
@@ -402,7 +400,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function checkNodeCollide(nx, ny) {
     if (nx >= MAP_WIDTH -5 || nx <= 5) {
       return true
-    } else if (ny >= MAP_HEIGHT -5 || ny <= 5) {
+    } else if (ny >= MAP_HEIGHT -30 || ny <= 5) {
       return true
     } else {
       return false
@@ -410,21 +408,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function moveNode() {
-    if (Math.floor(Math.random() * 8) == 0) {
+    if (Math.floor(Math.random() * 6) == 0) {
       this.last_angle = Math.floor(Math.random() * 359)
     }
 
     const radians = this.last_angle * Math.PI / 180
 
-    let nx = Math.floor(this.xpos + Math.cos(radians) * 4)
-    let ny = Math.floor(this.ypos + Math.sin(radians) * 4)
+    let nx = Math.floor(this.xpos + Math.cos(radians) * 6)
+    let ny = Math.floor(this.ypos + Math.sin(radians) * 6)
 
     if (!checkNodeCollide(nx, ny)) {
       this.xpos = nx
       this.ypos = ny
     } else {
-      let nx = Math.floor(this.xpos)// + -Math.cos(radians) * 2)
-      let ny = Math.floor(this.ypos)// + -Math.sin(radians) * 2)
+      let nx = Math.floor(this.xpos + -Math.cos(radians) * 6)
+      let ny = Math.floor(this.ypos + -Math.sin(radians) * 6)
       this.xpos = nx
       this.ypos = ny
     }
