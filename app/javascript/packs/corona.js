@@ -67,11 +67,13 @@ function showSimulations(simulation) {
   const time = document.createElement("p")
   const initial = document.createElement("p")
   const pop = document.createElement("p")
+  const line = document.createElement("hr")
 
   name.className = "name"
   time.className = "time"
   initial.className = "initial"
   pop.className = "population"
+  line.className = "line-divider"
 
   name.innerText = `Name: ${simulation.name}`
   time.innerText = `Time: ${simulation.time_running}`
@@ -82,7 +84,7 @@ function showSimulations(simulation) {
     getNodes.call(simulation)
   })
 
-  sim.append(name,time,initial,pop)
+  sim.append(name,time,initial,pop, line)
   scroll.append(sim)
 }
 
