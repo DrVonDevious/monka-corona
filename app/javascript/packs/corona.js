@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Simulation deleted!")
         removeSimulationListing.call(this)
         hideMap()
+        showForm()
         hideControls()
         scroll.style.display = "block"
         nodes_array = []
@@ -120,14 +121,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let current_pop = nodes_array.filter(node => node.state == "healthy" || node.state == "infected").length
     let current_healthy = nodes_array.filter(node => node.state == "healthy").length
     let current_infected = nodes_array.filter(node => node.state == "infected").length
-    // let current_time = setInterval(increment, 1000)
+    let current_time = setInterval(this.time_running + 1, 1000) / 100
     
     const time = document.querySelector("#time-stat")
     const pop = document.querySelector("#pop-stat")
     const healthy = document.querySelector("#healthy-stat")
     const infected = document.querySelector("#infected-stat")
 
-    time.innerText = "Time: " + current_time
+    time.innerText = "Time: " + Math.floor(current_time)
     pop.innerText = "Population: " + current_pop
     healthy.innerText = "Healthy: " + current_healthy
     infected.innerText = "Infected: " + current_infected
