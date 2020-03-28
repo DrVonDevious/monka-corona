@@ -66,8 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
       })
   }
 
-  //TODO: Saving does not work at all
-  //PATCH returns original node
   function saveNode() {
     console.log(this)
     fetch(NODE_URL + "/" + this.id, {
@@ -81,8 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
         age: this.age
       })
     })
-      .then(res => res.json())
-      .then(node => {})
   }
 
   function showSimulations(simulation) {
@@ -301,7 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
     nodes.forEach(node => {
       if ((this.xpos >= node.xpos -10 && this.xpos <= node.xpos +10) &&
          (this.ypos >= node.ypos -10 && this.ypos <= node.ypos +10)) {
-        if (node.state == "healthy") {
+        if ((node.state == "healthy") && Math.floor(Math.random() * 8) == 0) {
           node.state = "infected" 
         }
       }
@@ -421,10 +417,8 @@ document.addEventListener("DOMContentLoaded", () => {
       this.xpos = nx
       this.ypos = ny
     } else {
-      let nx = Math.floor(this.xpos + -Math.cos(radians) * 6)
-      let ny = Math.floor(this.ypos + -Math.sin(radians) * 6)
-      this.xpos = nx
-      this.ypos = ny
+      this.xpos = Math.floor(this.xpos + -Math.cos(radians) * 6)
+      this.ypos = Math.floor(this.ypos + -Math.sin(radians) * 6)
     }
   }
 
