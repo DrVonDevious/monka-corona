@@ -97,11 +97,8 @@ document.addEventListener("DOMContentLoaded", () => {
     pop.className = "population"
     line.className = "line-divider"
 
-<<<<<<< HEAD
     name.innerText = `${simulation.name}`
-=======
     name.innerText = ` ${simulation.name}`
->>>>>>> f68ab550edf5f2a036daecdc7251abead76bab0d
     time.innerText = `Time: ${simulation.time_running}`
     initial.innerText = `initial_infected: ${simulation.initial_infected}`
     pop.innerText = `Population: ${simulation.initial_population}`
