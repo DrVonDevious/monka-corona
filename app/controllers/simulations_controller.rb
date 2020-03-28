@@ -26,7 +26,7 @@ class SimulationsController < ApplicationController
   private
 
   def strong_params
-    params.permit(:name, :initial_infected, :is_running, :time_running,:initial_population)
+    params.permit(:name, :initial_infected, :is_running, :time_running, :initial_population, :infection_rate)
   end
 
   def simulation

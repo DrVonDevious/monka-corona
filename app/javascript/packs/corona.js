@@ -223,7 +223,8 @@ document.addEventListener("DOMContentLoaded", () => {
         initial_infected: parseInt(this.parentNode.parentNode[1].value),
         time_running: 0,
         is_running: true,
-        initial_population: parseInt(this.parentNode.parentNode[2].value)
+        initial_population: parseInt(this.parentNode.parentNode[2].value),
+        infection_rate: 10
       })
     })
       .then(res => res.json())
@@ -296,9 +297,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function spreadInfection(nodes) {
     nodes.forEach(node => {
+      let infect_chance = Math.floor(Math.random() * 199)
       if ((this.xpos >= node.xpos -10 && this.xpos <= node.xpos +10) &&
          (this.ypos >= node.ypos -10 && this.ypos <= node.ypos +10)) {
-        if ((node.state == "healthy") && Math.floor(Math.random() * 8) == 0) {
+        if ((node.state == "healthy") && (infect_chance >= 0 && infect_chance <= CURRENT_SIMULATION.infection_rate)) {
           node.state = "infected" 
         }
       }
@@ -421,6 +423,10 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       this.xpos = Math.floor(this.xpos + -Math.cos(radians) * 6)
       this.ypos = Math.floor(this.ypos + -Math.sin(radians) * 6)
+      if (this.xpos < 5) { this.xpos = 5 }
+      if (this.ypos < 5) { this.ypos = 5 }
+      if (this.xpos > MAP_WIDTH -5) { this.ypos = MAP_WIDTH -5 }
+      if (this.ypos > MAP_HEIGHT -30) { this.ypos = MAP_HEIGHT -30 }
     }
   }
 
@@ -432,7 +438,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       spreadInfection.call(this, nodes_array)
     }
-    refreshScreen.call(map)
   }
 
   function stepSimulation() {
