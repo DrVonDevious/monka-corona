@@ -67,7 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveNode() {
-    console.log(this)
     fetch(NODE_URL + "/" + this.id, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -104,8 +103,8 @@ document.addEventListener("DOMContentLoaded", () => {
     pop.innerText = `Population: ${simulation.initial_population}`
 
     sim.addEventListener("click", () => {
-      getNodes.call(simulation)
       CURRENT_SIMULATION = simulation
+      getNodes.call(simulation)
     })
 
     sim.append(name,time,initial,pop, line)
@@ -206,6 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const form_submit = document.querySelector("#form-submit")
 
     form_submit.addEventListener("click", () => {
+      nodes_array = []
       event.preventDefault()
       postSimulation.call(form_submit)
       hideForm()
@@ -213,8 +213,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function postSimulation() {
-    console.log("Posting object to: " + SIMULATIONS_URL)
-    console.log(this.parentNode.parentNode[2].value)
     fetch(SIMULATIONS_URL, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -224,14 +222,13 @@ document.addEventListener("DOMContentLoaded", () => {
         time_running: 0,
         is_running: true,
         initial_population: parseInt(this.parentNode.parentNode[2].value),
-        infection_rate: 10
+        infection_rate: parseInt(this.parentNode.parentNode[3].value)
       })
     })
       .then(res => res.json())
       .then(simulation => {
-        console.log(simulation)
-        createMap.call(simulation)
         CURRENT_SIMULATION = simulation
+        createMap.call(simulation)
       })
   }
 
@@ -297,10 +294,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function spreadInfection(nodes) {
     nodes.forEach(node => {
-      let infect_chance = Math.floor(Math.random() * 199)
+      let infect_chance = Math.floor(Math.random() * 99)
       if ((this.xpos >= node.xpos -10 && this.xpos <= node.xpos +10) &&
          (this.ypos >= node.ypos -10 && this.ypos <= node.ypos +10)) {
-        if ((node.state == "healthy") && (infect_chance >= 0 && infect_chance <= CURRENT_SIMULATION.infection_rate)) {
+        if ((node.state == "healthy") && (infect_chance < CURRENT_SIMULATION.infection_rate)) {
           node.state = "infected" 
         }
       }
@@ -327,9 +324,9 @@ document.addEventListener("DOMContentLoaded", () => {
       })
         .then(res => res.json())
         .then(node => {
-          node["last_angle"] = 0
+          node["last_angle"] = Math.floor(Math.random() * (Math.PI * 2))
           nodes_array.push(node)
-          renderNodes.call(nodes_array)
+          refreshScreen.call(map)
         })
     }
 
@@ -352,10 +349,10 @@ document.addEventListener("DOMContentLoaded", () => {
       })
         .then(res => res.json())
         .then(node => {
+          const map = document.querySelector("#map")
           node["last_angle"] = 0
-          nodes_array = []
           nodes_array.push(node)
-          renderNodes.call(nodes_array)
+          refreshScreen.call(map)
         })
     }
   }
@@ -386,11 +383,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function refreshScreen() {
     let context = this.getContext("2d")
     context.clearRect(0, 0, this.width, this.height)
-    renderScreen(nodes_array)
-  }
-
-  function renderScreen(nodes) {
-    renderNodes.call(nodes)
+    renderNodes.call(nodes_array)
   }
 
   function killNode() {
@@ -408,21 +401,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function moveNode() {
-    if (Math.floor(Math.random() * 6) == 0) {
-      this.last_angle = Math.floor(Math.random() * 359)
+    if (Math.floor(Math.random() * 8) == 0) {
+      this.last_angle = Math.floor(Math.random() * (Math.PI * 2))
     }
 
-    const radians = this.last_angle * Math.PI / 180
-
-    let nx = Math.floor(this.xpos + Math.cos(radians) * 6)
-    let ny = Math.floor(this.ypos + Math.sin(radians) * 6)
+    let nx = (this.xpos + (3 * Math.cos(this.last_angle)))
+    let ny = (this.ypos + (3 * Math.sin(this.last_angle)))
 
     if (!checkNodeCollide(nx, ny)) {
       this.xpos = nx
       this.ypos = ny
     } else {
-      this.xpos = Math.floor(this.xpos + -Math.cos(radians) * 6)
-      this.ypos = Math.floor(this.ypos + -Math.sin(radians) * 6)
+      this.xpos = (this.xpos + (3 * -Math.cos(this.last_angle)))
+      this.ypos = (this.ypos + (3 * -Math.sin(this.last_angle)))
+
       if (this.xpos < 5) { this.xpos = 5 }
       if (this.ypos < 5) { this.ypos = 5 }
       if (this.xpos > MAP_WIDTH -5) { this.ypos = MAP_WIDTH -5 }
